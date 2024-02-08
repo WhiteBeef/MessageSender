@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+
+}
+
+group = 'ru.whitebeef'
+version = '1.0.0'
+
+compileJava.options.encoding = 'UTF-8'
+
+
+def mavenRepoUsername = System.getenv("mvn-repo-username")
+def mavenRepoPassword = System.getenv("mvn-repo-token")
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url = uri("https://mvn.whitebeef.ru/private")
+        credentials {
+            username = mavenRepoUsername
+            password = mavenRepoPassword
+        }
+    }
+    maven {
+        url "https://repo.xikki.su/libraries"
+    }
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    implementation "org.hibernate.orm:hibernate-core:6.4.2.Final"
+    implementation 'org.springframework.data:spring-data-jpa:3.2.1'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.0.4'
+
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'org.hjson:hjson:3.1.0'
+
+    implementation 'ru.whitebeef:MeridianBot:1.4.9'
+    implementation 'net.dv8tion:JDA:5.0.0-beta.20'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

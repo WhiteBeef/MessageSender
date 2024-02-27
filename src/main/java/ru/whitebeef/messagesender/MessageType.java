@@ -4,19 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.hjson.JsonValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.whitebeef.meridianbot.command.discord.AbstractDiscordSlashCommand;
-import ru.whitebeef.meridianbot.registry.DiscordSlashCommandRegistry;
 import ru.whitebeef.meridianbot.utils.GsonUtils;
 import ru.whitebeef.meridianbot.utils.JsonUtils;
-import ru.whitebeef.messagesender.commands.SendMessageCommand;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,14 +28,13 @@ import java.util.stream.Stream;
 @Component
 public class MessageType {
 
+    @Getter
     private final Map<String, MessageCreateData> registeredMessages = new HashMap<>();
     private final MessageSender messageSender;
-    private final DiscordSlashCommandRegistry discordSlashCommandRegistry;
 
     @Autowired
-    public MessageType(MessageSender messageSender, DiscordSlashCommandRegistry discordSlashCommandRegistry) {
+    public MessageType(MessageSender messageSender) {
         this.messageSender = messageSender;
-        this.discordSlashCommandRegistry = discordSlashCommandRegistry;
     }
 
     @PostConstruct
@@ -61,7 +55,6 @@ public class MessageType {
             e.printStackTrace();
         }
         log.info("Зарегистрировано " + registeredMessages.size() + " сообщений!");
-        registerDiscordCommand();
     }
 
     @Nullable
@@ -97,16 +90,5 @@ public class MessageType {
                     .map(Path::toFile)
                     .toArray(File[]::new);
         }
-    }
-
-    private void registerDiscordCommand() {
-        AbstractDiscordSlashCommand.builder(
-                        new CommandDataImpl("sendmessage", "Отправляет зарегистрированные сообщения")
-                                .addOption(OptionType.STRING, "сообщение", "Название сообщения", true, true), SendMessageCommand.class)
-                .addAutoComplete("сообщение", (autoCompleteQuery) ->
-                        registeredMessages.keySet().stream()
-                                .map(s -> new Command.Choice(s, s))
-                                .toList())
-                .build().register(discordSlashCommandRegistry);
     }
 }

@@ -73,13 +73,17 @@ public class MessageType {
                 namespace = namespace.substring(0, namespace.length() - 5);
                 jsonElement = GsonUtils.getJsonObject(file);
             }
-            if (jsonElement.getAsJsonObject().has("content")) {
-                registeredMessages.put(namespace, MessageCreateData.fromContent(jsonElement.getAsJsonObject().get("content").getAsString()));
-            } else {
-                registeredMessages.put(namespace, MessageCreateData.fromEmbeds(JsonUtils.jsonToEmbed(jsonElement.getAsJsonObject())));
-            }
+            loadFromJsonElement(namespace, jsonElement);
         } catch (IOException e) {
             log.error("Ошибка при загрузке файла " + file.getName() + "! Пропускаем его!");
+        }
+    }
+
+    public void loadFromJsonElement(String namespace, JsonElement jsonElement) {
+        if (jsonElement.getAsJsonObject().has("content")) {
+            registeredMessages.put(namespace, MessageCreateData.fromContent(jsonElement.getAsJsonObject().get("content").getAsString()));
+        } else {
+            registeredMessages.put(namespace, MessageCreateData.fromEmbeds(JsonUtils.jsonToEmbed(jsonElement.getAsJsonObject())));
         }
     }
 

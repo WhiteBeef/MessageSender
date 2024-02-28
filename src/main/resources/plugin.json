@@ -1,4 +1,5 @@
 {
   "mainClass": "ru.whitebeef.messagesender.MessageSender",
-  "name": "MessageSender"
+  "name": "MessageSender",
+  "version": "$version"
 }

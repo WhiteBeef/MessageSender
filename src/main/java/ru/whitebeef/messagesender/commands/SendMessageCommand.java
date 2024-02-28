@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.interactions.AutoCompleteQuery;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 import ru.whitebeef.meridianbot.command.discord.AbstractDiscordSlashCommand;
 import ru.whitebeef.meridianbot.entities.Permission;
 import ru.whitebeef.meridianbot.registry.DiscordSlashCommandRegistry;
+import ru.whitebeef.meridianbot.repliers.impl.DefaultRepliers;
 import ru.whitebeef.messagesender.MessageType;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class SendMessageCommand extends AbstractDiscordSlashCommand {
         String messageNamespace = Objects.requireNonNull(event.getInteraction().getOption("сообщение")).getAsString();
 
         event.getChannel().sendMessage(messageType.getMessage(messageNamespace)).queue();
-        event.reply(MessageCreateData.fromContent("Успех!")).setEphemeral(true).queue();
+        DefaultRepliers.SUCCESS.reply(event);
     }
 
     @Bean

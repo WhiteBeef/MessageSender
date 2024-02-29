@@ -32,7 +32,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
-        url = uri("https://mvn.whitebeef.ru/private")
+        url = uri("https://mvn.wbif.ru/private")
         credentials {
             username = mavenRepoUsername
             password = mavenRepoPassword
@@ -47,6 +47,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
     implementation "org.hibernate.orm:hibernate-core:6.4.2.Final"
     implementation 'org.springframework.data:spring-data-jpa:3.2.1'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.0.4'
@@ -54,8 +55,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'org.hjson:hjson:3.1.0'
 
-    implementation 'ru.whitebeef:MeridianBot:1.5.5'
+    implementation 'ru.whitebeef:MeridianBot:1.6.0'
     implementation 'net.dv8tion:JDA:5.0.0-beta.20'
+
+
 
 }
 
@@ -80,8 +83,8 @@ publishing {
     }
     repositories {
         maven {
-            name = "femboymc-repository" //  optional target repository name
-            url = "https://mvn.femboymc.lgbt/releases"
+            name = "whitebeef-repository" //  optional target repository name
+            url = "https://mvn.wbif.ru/private"
             credentials {
                 username = mavenRepoUsername
                 password = mavenRepoPassword

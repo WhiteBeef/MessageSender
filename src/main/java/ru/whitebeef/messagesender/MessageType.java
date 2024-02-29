@@ -5,13 +5,19 @@ import com.google.gson.JsonParser;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.hjson.JsonValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.whitebeef.meridianbot.command.discord.AbstractDiscordSlashCommand;
+import ru.whitebeef.meridianbot.registry.DiscordSlashCommandRegistry;
 import ru.whitebeef.meridianbot.utils.GsonUtils;
 import ru.whitebeef.meridianbot.utils.JsonUtils;
+import ru.whitebeef.messagesender.commands.SendMessageCommand;
 
 import java.io.File;
 import java.io.FileReader;
@@ -24,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Log4j2
+@Slf4j
 @Component
 public class MessageType {
 
@@ -33,8 +39,9 @@ public class MessageType {
     private final MessageSender messageSender;
 
     @Autowired
-    public MessageType(MessageSender messageSender) {
+    public MessageType(MessageSender messageSender, DiscordSlashCommandRegistry discordSlashCommandRegistry) {
         this.messageSender = messageSender;
+        registerDiscordCommand(discordSlashCommandRegistry);
     }
 
     @PostConstruct
@@ -94,5 +101,16 @@ public class MessageType {
                     .map(Path::toFile)
                     .toArray(File[]::new);
         }
+    }
+
+    private void registerDiscordCommand(DiscordSlashCommandRegistry discordSlashCommandRegistry) {
+        AbstractDiscordSlashCommand.builder(
+                        new CommandDataImpl("sendmessage", "Отправляет зарегистрированные сообщения")
+                                .addOption(OptionType.STRING, "сообщение", "Название сообщения", true, true), SendMessageCommand.class)
+                .addAutoComplete("сообщение", (autoCompleteQuery) ->
+                        registeredMessages.keySet().stream()
+                                .map(s -> new Command.Choice(s, s))
+                                .toList())
+                .build().register(discordSlashCommandRegistry);
     }
 }

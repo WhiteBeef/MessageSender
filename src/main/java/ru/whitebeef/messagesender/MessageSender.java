@@ -1,17 +1,16 @@
 package ru.whitebeef.messagesender;
 
-
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import ru.whitebeef.meridianbot.plugin.BeefPlugin;
 import ru.whitebeef.meridianbot.plugin.PluginClassLoader;
 import ru.whitebeef.meridianbot.plugin.PluginInfo;
 
-@Log4j2
+@Slf4j
 public class MessageSender extends BeefPlugin {
 
-    public MessageSender(@NotNull PluginInfo info, PluginClassLoader pluginClassLoader, ApplicationContext applicationContext) {
+    public MessageSender(@NotNull PluginInfo info, PluginClassLoader pluginClassLoader, GenericApplicationContext applicationContext) {
         super(info, pluginClassLoader, applicationContext);
     }
 

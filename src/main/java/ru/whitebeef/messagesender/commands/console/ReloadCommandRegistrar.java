@@ -1,6 +1,6 @@
 package ru.whitebeef.messagesender.commands.console;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.whitebeef.meridianbot.command.AbstractCommand;
 import ru.whitebeef.meridianbot.command.SimpleCommand;
@@ -11,8 +11,10 @@ import ru.whitebeef.messagesender.MessageType;
 @Component
 public class ReloadCommandRegistrar {
 
-    @Bean
-    public void registerCommand(CommandRegistry commandRegistry, MessageType messageType, MessageSender messageSender) {
+
+    @Autowired
+    public ReloadCommandRegistrar(CommandRegistry commandRegistry, MessageType messageType, MessageSender messageSender) {
         AbstractCommand.builder(messageSender.getInfo().getName().toLowerCase() + ":reload", SimpleCommand.class).setOnCommand(strings -> messageType.loadHJsonFiles()).build().register(commandRegistry);
+
     }
 }

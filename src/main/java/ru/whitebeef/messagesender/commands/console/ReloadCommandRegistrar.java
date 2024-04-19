@@ -15,6 +15,7 @@ public class ReloadCommandRegistrar {
     public ReloadCommandRegistrar(CommandRegistry commandRegistry, MessageType messageType, MessageSender messageSender) {
         AbstractCommand
                 .builder(messageSender.getInfo().getName().toLowerCase() + ":reload", SimpleCommand.class)
+                .setDescription("Перезагружает файлы MessageSender'a")
                 .setOnCommand(strings -> messageType.loadHJsonFiles()).build().register(commandRegistry);
     }
 }

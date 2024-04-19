@@ -1,5 +1,8 @@
 {
   "mainClass": "ru.whitebeef.messagesender.MessageSender",
   "name": "MessageSender",
-  "version": "$version"
+  "version": "$version",
+  "depends": [
+    "BeefDiscordInjector"
+  ]
 }

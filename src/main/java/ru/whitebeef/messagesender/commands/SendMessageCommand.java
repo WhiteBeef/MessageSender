@@ -6,11 +6,9 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.whitebeef.meridianbot.command.discord.AbstractDiscordSlashCommand;
-import ru.whitebeef.meridianbot.entities.Permission;
-import ru.whitebeef.meridianbot.plugin.PluginRegistry;
-import ru.whitebeef.meridianbot.provider.ApplicationContextProvider;
-import ru.whitebeef.meridianbot.repliers.impl.DefaultRepliers;
+import ru.whitebeef.beefcore.entities.Permission;
+import ru.whitebeef.beefdiscordinjector.commands.AbstractDiscordSlashCommand;
+import ru.whitebeef.beefdiscordinjector.repliers.DefaultRepliers;
 import ru.whitebeef.messagesender.MessageSender;
 import ru.whitebeef.messagesender.MessageType;
 
@@ -20,22 +18,22 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-
 public class SendMessageCommand extends AbstractDiscordSlashCommand {
+
+    private MessageType messageType;
 
     public SendMessageCommand(@NotNull CommandData commandData, @Nullable Permission permission, @Nullable Consumer<SlashCommandInteractionEvent> onCommand, Map<String, Function<AutoCompleteQuery, List<Command.Choice>>> onTabComplete) {
         super(commandData, permission, onCommand, onTabComplete);
 
+        setMessageType(MessageSender.getInstance().getPluginApplicationContext().getBean(MessageType.class));
     }
 
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
+    }
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        MessageType messageType = ApplicationContextProvider.getContext()
-                .getBean(PluginRegistry.class)
-                .getPlugin(MessageSender.class)
-                .getPluginApplicationContext()
-                .getBean(MessageType.class);
         String messageNamespace = Objects.requireNonNull(event.getInteraction().getOption("сообщение")).getAsString();
         event.getChannel().sendMessage(messageType.getMessage(messageNamespace)).queue();
         DefaultRepliers.SUCCESS.reply(event);

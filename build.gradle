@@ -55,7 +55,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'org.hjson:hjson:3.1.0'
 
-    implementation 'ru.whitebeef:MeridianBot:1.6.0'
+    implementation 'ru.whitebeef:BeefCore:1.7.0'
+    implementation 'ru.whitebeef:BeefDiscordInjector:1.0.1'
     implementation 'net.dv8tion:JDA:5.0.0-beta.20'
 
 
